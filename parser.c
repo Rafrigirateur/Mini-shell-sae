@@ -77,7 +77,20 @@ void addToList(char *args[], char *mot) {
     while (args[i] != NULL) {
         i++;
     }
-    args[i] = strdup(mot);
+
+
+    if (mot[0] == '$') {
+        char *valeur = getenv(mot + 1); // on saute le '$' avec +1
+        if (valeur != NULL) {
+            args[i] = strdup(valeur);
+        } else {
+            // Si la variable n'existe pas, on met une chaine vide ou on ignore
+            args[i] = strdup(""); 
+        }
+    } else {
+        args[i] = strdup(mot);
+    }
+    
     args[i + 1] = NULL;
 }
 
