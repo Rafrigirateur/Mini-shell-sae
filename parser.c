@@ -108,6 +108,23 @@ void commande(char *args[]){
         return;
     }
 
+    if (!strcmp(args[0], "set")) {
+        if (args[1] == NULL) {
+            extern char **environ;
+            for (char **env = environ; *env; ++env) {
+                printf("%s\n", *env);
+            }
+        } 
+        else if (args[2] != NULL) {
+            if (setenv(args[1], args[2], 1) != 0) {
+                perror("\033[31mErreur setenv");
+            }
+        } else {
+            printf("\033[31mUsage: set <VAR> <VALEUR>\n");
+        }
+        return;
+    }
+
     switch(fork()){
         case -1:
             // Erreur de fork
