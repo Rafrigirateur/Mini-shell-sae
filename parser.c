@@ -192,9 +192,33 @@ int main(int argc, char *argv[]){
                 // enregistrement du mot dans la liste des arguments
                 addToList(args, mot);
                 break; 
-            case TUB: 
+            case TUB:
                 // printf("TUBE\n"); 
-                break; 
+                int p[2];
+                if (pipe(p) == -1) {
+                    perror("pipe");
+                    exit(1);
+                }
+
+                if (fork() == 0) {
+                    dup2(p[1], 1);
+                    close(p[0]);
+                    close(p[1]);
+                    
+                    execvp(args[0], args);
+                    perror("\033[31mErreur execvp pipe");
+                    exit(1);
+                }
+
+                dup2(p[0], 0);
+                close(p[1]);
+                close(p[0]);
+
+                for (int i = 0; args[i] != NULL; i++) {
+                    free(args[i]);
+                    args[i] = NULL;
+                }
+                break;
             case INF: 
                 // printf("REDIRECTION ENTREE\n"); 
                 getlex(mot);
