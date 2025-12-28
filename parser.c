@@ -222,7 +222,13 @@ int main(int argc, char *argv[]){
             case INF: 
                 // printf("REDIRECTION ENTREE\n"); 
                 getlex(mot);
-                fd = open(mot, O_RDONLY, 0666);
+                char *f_in = mot;
+                if (mot[0] == '$') {
+                    char *v = getenv(mot + 1);
+                    if (v) f_in = v;
+                }
+
+                fd = open(f_in, O_RDONLY, 0666);
                 if (fd == -1){
                     perror("\033[31mErreur fichier inconue");
                     exit(1);
@@ -233,7 +239,13 @@ int main(int argc, char *argv[]){
             case SUP: 
                 // printf("REDIRECTION SORTIE\n"); 
                 getlex(mot);
-                fd = open(mot, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+                char *f_out = mot;
+                if (mot[0] == '$') {
+                    char *v = getenv(mot + 1);
+                    if (v) f_out = v;
+                }
+
+                fd = open(f_out, O_WRONLY | O_CREAT | O_TRUNC, 0666);
                 if (fd == -1){
                     perror("\033[31mErreur fichier inconue");
                     exit(1);
@@ -244,7 +256,13 @@ int main(int argc, char *argv[]){
             case SPP: 
                 // printf("REDIRECTION AJOUT\n"); 
                 getlex(mot);
-                fd = open(mot, O_WRONLY | O_CREAT | O_APPEND, 0666);
+                char *f_app = mot;
+                if (mot[0] == '$') {
+                    char *v = getenv(mot + 1);
+                    if (v) f_app = v;
+                }
+
+                fd = open(f_app, O_WRONLY | O_CREAT | O_APPEND, 0666);
                 if (fd == -1){
                     perror("\033[31mErreur fichier inconue");
                     exit(1);
