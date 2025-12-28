@@ -260,8 +260,8 @@ int main(int argc, char *argv[]){
                 // remise des stdin et stdout par default
                 dup2(std_in, 0);
                 dup2(std_out, 1);
-                close(std_in);
-                close(std_out);
+                //close(std_in);
+                //close(std_out);
 
                 // reinitialisation de la liste des arguments
                 for (int i = 0; args[i] != NULL; i++) {
@@ -272,6 +272,8 @@ int main(int argc, char *argv[]){
                 break;
             case FIN: 
                 // printf("FIN \n"); 
+                close(std_in);
+                close(std_out);
                 exit(0); 
         }
     }
